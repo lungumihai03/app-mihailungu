@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/x-icon" href="qrcode.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generator QR Code</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background-color: #f0f0f0;
+    }
+    h1 {
+      color: #333;
+    }
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    #input {
+      width: 90%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    #qr-code {
+      display: none;
+      margin-top: 20px;
+    }
+    #generate-btn {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    #generate-btn:hover {
+      background-color: #45a049;
+    }
+	   #save-btn {
+      display: none;
+      background-color: #1E90FF;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    #save-btn:hover {
+      background-color: #4169E1;
+    }
+  .input-fields {
+      display: none;
+    }
+    .input-fields.active {
+      display: block;
+    }
+    .input-fields input[type="text"],
+    .input-fields textarea {
+      width: 90%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .input-fields p {
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .input-fields input[type="radio"] {
+      margin-right: 5px;
+    }
+    .input-fields textarea {
+      resize: vertical;
+      height: 100px;
+    }
+	  .input-fields#contact-fields input[type="text"] {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+	  .input-fields#wifi-fields input[type="text"] {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  .input-fields#wifi-fields p {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+	   .input-fields#text-fields input[type="text"] {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+	  .input-fields#sms-fields input[type="text"],
+  .input-fields#sms-fields textarea {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  .input-fields#sms-fields textarea {
+    resize: vertical;
+    height: 100px;
+  }
+	  .input-fields#email-fields input[type="text"],
+  .input-fields#email-fields textarea {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  .input-fields#email-fields textarea {
+    resize: vertical;
+    height: 100px;
+  }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Generator QR Code</h1>
+    <p>Alege tipul de QR code:</p>
+    <input type="radio" name="qrcode-type" value="url" onclick="showInputFields('url')"> Link (URL)
+    <input type="radio" name="qrcode-type" value="contact" onclick="showInputFields('contact')"> Contact
+    <input type="radio" name="qrcode-type" value="wifi" onclick="showInputFields('wifi')"> WiFi
+    <input type="radio" name="qrcode-type" value="text" onclick="showInputFields('text')"> Text
+    <input type="radio" name="qrcode-type" value="sms" onclick="showInputFields('sms')"> SMS
+    <input type="radio" name="qrcode-type" value="email" onclick="showInputFields('email')"> Email
+    <!-- Puteți adăuga și altele -->
+
+    <div class="input-fields" id="url-fields">
+      <input type="text" id="url-input" placeholder="Introduceți URL-ul aici">
+    </div>
+
+    <div class="input-fields" id="contact-fields">
+  <input type="text" id="contact-name" placeholder="Nume">
+  <input type="text" id="contact-phone" placeholder="Număr de telefon">
+  <input type="text" id="contact-email" placeholder="Adresă de email">
+</div>
+
+
+    <div class="input-fields" id="wifi-fields">
+  <input type="text" id="wifi-ssid" placeholder="Numele rețelei (SSID)">
+  <input type="text" id="wifi-password" placeholder="Parolă">
+  <p>Metoda de securitate:</p>
+  <input type="radio" name="wifi-security" value="WPA/WPA2" checked> WPA/WPA2
+  <input type="radio" name="wifi-security" value="WEP"> WEP
+  <input type="radio" name="wifi-security" value="None"> Niciuna
+</div>
+
+
+    <div class="input-fields" id="text-fields">
+      <input type="text" id="text-input" placeholder="Introduceți textul aici">
+    </div>
+
+    <div class="input-fields" id="sms-fields">
+  <input type="text" id="sms-number" placeholder="Număr de telefon">
+  <input type="text" id="sms-text" placeholder="Mesaj SMS">
+</div>
+
+
+    <div class="input-fields" id="email-fields">
+  <input type="text" id="email-address" placeholder="Adresă de email">
+  <input type="text" id="email-subject" placeholder="Subiect">
+  <textarea id="email-body" placeholder="Corpul email-ului"></textarea>
+</div>
+
+
+    <button id="generate-btn" onclick="generateQRCode()">Generează QR Code</button>
+    <center>
+      <div id="qr-code"></div>
+      <br>
+      <button id="save-btn">Salvează ca poză</button>
+    </center>
+  </div>
+  <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js" crossorigin="anonymous"></script>
+
+  <script>
+    function showInputFields(type) {
+      const inputFields = document.querySelectorAll('.input-fields');
+      for (let i = 0; i < inputFields.length; i++) {
+        if (inputFields[i].id === `${type}-fields`) {
+          inputFields[i].classList.add('active');
+        } else {
+          inputFields[i].classList.remove('active');
+        }
+      }
+    }
+function generateContactInfo() {
+    const contactName = document.getElementById('contact-name').value;
+    const contactPhone = document.getElementById('contact-phone').value;
+    const contactEmail = document.getElementById('contact-email').value;
+
+    if (!contactName || !contactPhone || !contactEmail) {
+      alert('Vă rugăm să completați toate câmpurile pentru contact!');
+      return;
+    }
+
+    const contactInfo = `BEGIN:VCARD\nVERSION:3.0\nFN:${contactName}\nTEL:${contactPhone}\nEMAIL:${contactEmail}\nEND:VCARD`;
+    return contactInfo;
+  }
+	   function generateWifiInfo() {
+    const wifiSSID = document.getElementById('wifi-ssid').value;
+    const wifiPassword = document.getElementById('wifi-password').value;
+    const wifiSecurity = document.querySelector('input[name="wifi-security"]:checked').value;
+
+    if (!wifiSSID || !wifiPassword) {
+      alert('Vă rugăm să completați toate câmpurile pentru WiFi!');
+      return;
+    }
+
+    const wifiInfo = `WIFI:S:${wifiSSID};T:${wifiSecurity};P:${wifiPassword};;`;
+    return wifiInfo;
+  }
+	  function generateSMSInfo() {
+    const smsNumber = document.getElementById('sms-number').value;
+    const smsText = document.getElementById('sms-text').value;
+
+    if (!smsNumber || !smsText) {
+      alert('Vă rugăm să completați toate câmpurile pentru SMS!');
+      return;
+    }
+
+    const smsInfo = `SMSTO:${smsNumber}:${smsText}`;
+    return smsInfo;
+  }
+	  function generateEmailInfo() {
+    const emailAddress = document.getElementById('email-address').value;
+    const emailSubject = document.getElementById('email-subject').value;
+    const emailBody = document.getElementById('email-body').value;
+
+    if (!emailAddress || !emailSubject || !emailBody) {
+      alert('Vă rugăm să completați toate câmpurile pentru email!');
+      return;
+    }
+
+    const emailInfo = `mailto:${encodeURIComponent(emailAddress)}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+    return emailInfo;
+  }
+    function generateQRCode() {
+      const selectedType = document.querySelector('input[name="qrcode-type"]:checked').value;
+      let link;
+
+      switch (selectedType) {
+        case 'url':
+          link = document.getElementById('url-input').value;
+          break;
+        case 'contact':
+          link = generateContactInfo();
+          break;
+        case 'wifi':
+          link = generateWifiInfo();
+          break;
+        case 'text':
+          link = document.getElementById('text-input').value;
+          break;
+        case 'sms':
+          link = generateSMSInfo();
+          break;
+        case 'email':
+          link = generateEmailInfo();
+          break;
+        // Puteți adăuga și alte cazuri pentru tipuri suplimentare de QR code-uri
+        default:
+          break;
+      }
+
+      if (!link) {
+        alert('Vă rugăm să introduceți informația necesară!');
+        return;
+      }
+
+      const qrCodeDiv = document.getElementById('qr-code');
+      qrCodeDiv.innerHTML = ''; // Clear previous QR code, if any
+
+      const qrCode = new QRCode(qrCodeDiv, {
+        text: link,
+        width: 256,
+        height: 256,
+      });
+      qrCodeDiv.style.display = 'block';
+
+      // Afișăm butonul de salvare
+      const saveBtn = document.getElementById('save-btn');
+      saveBtn.style.display = 'block';
+    }
+
+    function saveQRCodeAsImage() {
+    const qrCodeDiv = document.getElementById('qr-code');
+    const qrCodeImage = qrCodeDiv.querySelector('img');
+
+    if (!qrCodeImage) {
+      alert('QR Code nu există sau nu a fost generat încă.');
+      return;
+    }
+
+    const canvas = document.createElement('canvas');
+    canvas.width = qrCodeImage.width;
+    canvas.height = qrCodeImage.height;
+    const context = canvas.getContext('2d');
+    context.drawImage(qrCodeImage, 0, 0);
+
+    const a = document.createElement('a');
+    a.href = canvas.toDataURL('image/png');
+    a.download = `qrcode.png`;
+    a.click();
+  }
+
+    document.getElementById('save-btn').addEventListener('click', saveQRCodeAsImage);
+  </script>
+</body>
+</html>
