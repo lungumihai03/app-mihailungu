@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="../app.png">
+    <style>
+	
+	
+	body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+		text-align: center;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+}
+
+.input-container {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+#productInput {
+    flex: 1;
+    padding: 5px;
+}
+
+button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.shopping-list {
+    list-style: none;
+    padding: 0;
+}
+
+.shopping-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.shopping-list li input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+#refreshButton {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+	
+	</style>
+    
+    <title>Lista de Cumpărături</title>
+</head>
+<body>
+	<a href="../"><img src="../app.png" style="width: 209px; height: 100px"></a>
+	<br>
+    <div class="container">
+        <h1>Lista de Cumpărături</h1>
+        <div class="input-container">
+            <input type="text" id="productInput" placeholder="Introduceți produsul...">
+            <button id="addButton">Adaugă</button>
+        </div>
+        <ul id="shoppingList" class="shopping-list">
+        </ul>
+        <button id="refreshButton">Reîmprospătează</button>
+    </div>
+	<script>
+		const addButton = document.getElementById('addButton');
+const productInput = document.getElementById('productInput');
+const shoppingList = document.getElementById('shoppingList');
+const refreshButton = document.getElementById('refreshButton');
+
+addButton.addEventListener('click', () => {
+    const product = productInput.value;
+    if (product !== '') {
+        const listItem = document.createElement('li');
+        listItem.innerHTML = `
+            <input type="checkbox">
+            <span>${product}</span>
+        `;
+        shoppingList.appendChild(listItem);
+        productInput.value = '';
+    }
+});
+		productInput.addEventListener('keyup', (event) => {
+    if (event.key === 'Enter') {
+        addButton.click();
+    }
+});
+
+shoppingList.addEventListener('click', (event) => {
+    if (event.target.tagName === 'INPUT' && event.target.type === 'checkbox') {
+        const listItem = event.target.parentElement;
+        const textSpan = listItem.querySelector('span');
+        textSpan.style.textDecoration = event.target.checked ? 'line-through' : 'none';
+    }
+});
+
+refreshButton.addEventListener('click', () => {
+    shoppingList.innerHTML = ''; 
+});
+</script>
+
+</body>
+</html>
